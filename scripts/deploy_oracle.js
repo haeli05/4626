@@ -8,8 +8,8 @@ async function main() {
     console.log("Deploying with account:", deployer.address);
     
     // Deploy oracle
-    const Oracle = await hre.ethers.getContractFactory("RWA4626Oracle");
-    const oracle = await Oracle.deploy();
+    const RWA4626Oracle = await hre.ethers.getContractFactory("RWA4626Oracle");
+    const oracle = await RWA4626Oracle.deploy();
     await oracle.waitForDeployment();
     
     const oracleAddress = await oracle.getAddress();
