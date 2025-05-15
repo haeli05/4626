@@ -27,38 +27,28 @@ describe("RWA4626Oracle", function () {
         it("Should allow owner to add asset", async function () {
             await oracle.addAsset(user1.address, INITIAL_PRICE, ONE_WEEK);
             
-            const priceData = await oracle.getPriceData(user1.address);
-            expect(priceData.price).to.equal(INITIAL_PRICE);
-            expect(priceData.updateInterval).to.equal(ONE_WEEK);
-            expect(priceData.active).to.be.true;
+            expect(await oracle.getPrice(user1.address)).to.equal(INITIAL_PRICE);
+            expect(await oracle.getUpdateInterval(user1.address)).to.equal(ONE_WEEK);
+            expect(await oracle.isAssetActive(user1.address)).to.be.true;
         });
 
         it("Should not allow non-owner to add asset", async function () {
             await expect(
                 oracle.connect(user1).addAsset(user2.address, INITIAL_PRICE, ONE_WEEK)
-            ).to.be.revertedWith("Ownable: caller is not the owner");
+            ).to.be.revertedWithCustomError(oracle, "OwnableUnauthorizedAccount");
         });
 
         it("Should allow owner to remove asset", async function () {
             await oracle.addAsset(user1.address, INITIAL_PRICE, ONE_WEEK);
             await oracle.removeAsset(user1.address);
             
-            const priceData = await oracle.getPriceData(user1.address);
-            expect(priceData.active).to.be.false;
+            expect(await oracle.isAssetActive(user1.address)).to.be.false;
         });
     });
 
     describe("Price Updates", function () {
         beforeEach(async function () {
             await oracle.addAsset(user1.address, INITIAL_PRICE, ONE_WEEK);
-        });
-
-        it("Should allow owner to update price", async function () {
-            const newPrice = ethers.parseUnits("1.1", 6);
-            await oracle.updatePrice(user1.address, newPrice);
-            
-            const priceData = await oracle.getPriceData(user1.address);
-            expect(priceData.price).to.equal(newPrice);
         });
 
         it("Should not allow price updates before interval", async function () {
@@ -76,25 +66,27 @@ describe("RWA4626Oracle", function () {
             const newPrice = ethers.parseUnits("1.1", 6);
             await oracle.updatePrice(user1.address, newPrice);
             
-            const priceData = await oracle.getPriceData(user1.address);
-            expect(priceData.price).to.equal(newPrice);
+            expect(await oracle.getPrice(user1.address)).to.equal(newPrice);
         });
     });
 
     describe("Update Interval", function () {
+        beforeEach(async function () {
+            await oracle.addAsset(user1.address, INITIAL_PRICE, ONE_WEEK);
+        });
+
         it("Should allow owner to change update interval", async function () {
             const newInterval = ONE_WEEK * 2;
             await oracle.setUpdateInterval(user1.address, newInterval);
             
-            const priceData = await oracle.getPriceData(user1.address);
-            expect(priceData.updateInterval).to.equal(newInterval);
+            expect(await oracle.getUpdateInterval(user1.address)).to.equal(newInterval);
         });
 
         it("Should not allow non-owner to change update interval", async function () {
             const newInterval = ONE_WEEK * 2;
             await expect(
                 oracle.connect(user1).setUpdateInterval(user2.address, newInterval)
-            ).to.be.revertedWith("Ownable: caller is not the owner");
+            ).to.be.revertedWithCustomError(oracle, "OwnableUnauthorizedAccount");
         });
     });
 }); 

@@ -3,16 +3,17 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./RWA4626Oracle.sol";
-import "@openzeppelin/contracts/utils/Math.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
+
 
 /**
  * @title RWA4626Vault
- * @author Your Name
+ * @author @haojun222
  * @notice ERC4626 vault implementation for Real World Assets with oracle integration
  * @dev This contract implements the ERC4626 standard for tokenized vaults
  * It integrates with an oracle for price updates and includes fee mechanisms
@@ -207,7 +208,7 @@ contract RWA4626Vault is ERC4626, ReentrancyGuard, Pausable, Ownable {
         
         // Calculate shares as assets/price
         // Multiply by PRICE_DECIMALS to maintain precision
-        return assets * PRICE_DECIMALS / price;
+        return Math.mulDiv(assets, PRICE_DECIMALS, price, rounding);
     }
 
     /**
@@ -228,7 +229,7 @@ contract RWA4626Vault is ERC4626, ReentrancyGuard, Pausable, Ownable {
         
         // Calculate assets as shares * price
         // Divide by PRICE_DECIMALS to maintain precision
-        return shares * price / PRICE_DECIMALS;
+        return Math.mulDiv(shares, price, PRICE_DECIMALS, rounding);
     }
 
     /**

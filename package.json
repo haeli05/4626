@@ -1,17 +1,16 @@
 {
-  "name": "rwa-4626-vault",
+  "name": "rwa4626-vault",
   "version": "1.0.0",
-  "description": "ERC4626 tokenized vault implementation for Real World Assets",
+  "description": "ERC4626 vault implementation for Real World Assets",
   "main": "index.js",
   "scripts": {
-    "test": "hardhat test",
-    "compile": "hardhat compile"
+    "test": "hardhat test"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^5.0.1",
-    "hardhat": "^2.19.5"
+    "@openzeppelin/contracts": "^5.0.1"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0"
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.4"
   }
 } 

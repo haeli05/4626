@@ -70,6 +70,10 @@ describe("RWA4626Vault", function () {
         });
 
         it("Should calculate shares correctly at $1.10 price", async function () {
+            // Fast forward time to allow price update
+            await ethers.provider.send("evm_increaseTime", [ONE_WEEK + 1]);
+            await ethers.provider.send("evm_mine");
+            
             const newPrice = ethers.parseUnits("1.1", 6);
             await oracle.updatePrice(vault.target, newPrice);
             

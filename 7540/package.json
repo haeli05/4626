@@ -1,0 +1,19 @@
+{
+  "name": "eip7540-implementation",
+  "version": "1.0.0",
+  "description": "Implementation of EIP7540 - ERC-7540: ERC-4626 Vault with Price Oracle",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "hardhat compile"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.1",
+    "hardhat": "^2.19.5"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "chai": "^4.3.7",
+    "ethers": "^6.11.1"
+  }
+} 
